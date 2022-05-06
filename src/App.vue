@@ -39,6 +39,21 @@ export default {
         if(window.location.pathname === '/'){
             this.$router.push(this.menuList.home.path)
         }
+        if(window.location.pathname === '/count'){
+            this.$router.push(this.menuList.count.path)
+        }
+        if(window.location.pathname === '/calculate'){
+            this.$router.push(this.menuList.calculate.path)
+        }
+        if(window.location.pathname === '/info'){
+            this.$router.push(this.menuList.info.path)
+        }
+        if(window.location.pathname === '/about'){
+            this.$router.push(this.menuList.about.path)
+        }
+        else{
+            alert("page no");
+        }
     }
 
 };

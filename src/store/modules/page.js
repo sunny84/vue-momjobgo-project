@@ -1,5 +1,7 @@
 import HomeView from '@/views/HomeView.vue'
 import AboutView from '@/views/AboutView.vue'
+import CountView from '@/views/CountView.vue'
+import CalculateView from '@/views/CalculateView.vue'
 
 export default {
 
@@ -22,12 +24,32 @@ export default {
                 component : HomeView
             },
 
+            count : {
+                path: `/count`,
+                name: `count`,
+                meta: {
+                    title: `Count`,
+                    icon: `event`
+                },
+                component : CountView
+            },
+
+            math : {
+                path: `/calculate`,
+                name: `calculate`,
+                meta: {
+                    title: `Calculate`,
+                    icon: `event`
+                },
+                component : CalculateView
+            },
+
             about : {
                 path: `/about`,
                 name: `about`,
                 meta: {
                     title: `About`,
-                    icon: `question_mark`
+                    icon: `info`
                 },
                 component : AboutView
             }
