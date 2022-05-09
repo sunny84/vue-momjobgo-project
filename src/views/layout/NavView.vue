@@ -48,6 +48,7 @@ export default {
     ...mapActions('user', ['setToken']),
 
     logout(){
+      // 로그아웃 구현하세요.
       if(!confirm('로그아웃 하시겠습니까?')){
         return false;
       }
