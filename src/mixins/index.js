@@ -19,7 +19,7 @@ export default {
 
             return axios({
                 headers: {
-                    Authorization: `Bearer ${store.state.user.token}`
+                    Authorization: `Bearer ${store.getters['user/token']}`
                 },
                 method: method
                 , url
