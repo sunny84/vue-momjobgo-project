@@ -1,5 +1,4 @@
 import HomeView from '@/views/HomeView.vue'
-import AboutView from '@/views/AboutView.vue'
 import LoginView from '@/views/login/LoginView.vue'
 
 export default {
@@ -22,17 +21,6 @@ export default {
                     display : true
                 },
                 component : HomeView
-            },
-
-            about : {
-                path: `/about`,
-                name: `about`,
-                meta: {
-                    title: `About`,
-                    icon: `question_mark`,
-                    display : true
-                },
-                component : AboutView
             },
 
             login : {
