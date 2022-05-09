@@ -1,11 +1,11 @@
 import axios from '@/plugins/axios'
 import store from '@/store'
-import Code from '@/utils/Code'
+import Code from '@/static/Code'
 
 export default {
 
     data: () => ({
-        ...Code
+
     }),
 
     methods: {
@@ -30,7 +30,7 @@ export default {
                     && e.response.data.error === 'Invalid token'){
 
                     alert('로그인 정보가 만료되었습니다.'); 
-                    store.dispatch('setToken', null);
+                    store.dispatch('user/setToken', null);
 
                 } else if(errorCallback){
                     errorCallback(e.response);
@@ -39,17 +39,6 @@ export default {
                 }
             });
             
-        },
-
-        $loadKakaoMap(callback) {
-            if (typeof kakao === 'undefined') {
-                const script = document.createElement('script');
-                script.onload = () => kakao.maps.load(callback);
-                script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.VUE_APP_KAKAOMAP_KEY}&autoload=false&libraries=services`;
-                document.head.appendChild(script);
-            } else {
-                callback();
-            }
         },
 
     },
