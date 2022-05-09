@@ -29,7 +29,7 @@ export default {
                 name: `user`,
                 meta: {
                     title: `User`,
-                    icon: ``,
+                    icon: `account_circle`,
                     display : true
                 },
                 component : UserView
