@@ -5,7 +5,7 @@ import Code from '@/static/Code'
 export default {
 
     data: () => ({
-
+        ...Code
     }),
 
     methods: {
@@ -25,7 +25,7 @@ export default {
                 , url
                 , data
             }).catch(e => {
-                if(e.response.status === Code.HTTP_UNAUTHORIZED 
+                if(e.response.status === this.HTTP_UNAUTHORIZED 
                     && e.response?.data?.error 
                     && e.response.data.error === 'Invalid token'){
 

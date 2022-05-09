@@ -55,11 +55,25 @@
 
         methods : {
             ...mapActions('page', ['setAllVisible']),
+            ...mapActions('user', ['setToken', 'setName', 'setId']),
 
-            login() {
+            async login() {
                 // 1. 로그인을 구현하세요.
+                const response = await this.$api(`/auth/user`, "post", {
+                    id: this.id,
+                    pwd: this.password,
+                });
+
+                if(response?.status === this.HTTP_OK){
+                    const token = response.data.token;
+                    this.setToken(token);
+                    
+                    // 2. 로그인을 한 이후 회원정보를 가져와 vuex 유저에 등록하세요.
+                    const {data : user} = await this.$api(`/api/auth/user`, 'get')
+                    this.setId(user.id);
+                    this.setName(user.name);
+                } 
                 
-                // 2. 로그인을 한 이후 회원정보를 가져와 vuex 유저에 등록하세요.
             }
         },
 

@@ -5,6 +5,7 @@ export default {
     state : {
         token : sessionStorage.getItem('access-token'),
         user : {
+            id : '',
             name : ''
         }
     },
@@ -19,7 +20,7 @@ export default {
         },
 
         hasToken(state){
-            return !!state.user.token;
+            return !!state.token;
         }
     },
 
@@ -31,12 +32,20 @@ export default {
         setToken(state, token){
             state.token = token;
             sessionStorage.setItem('access-token', token);
-        }
+        },
+
+        setId(state, id){
+            state.id = id;
+        },
     },
 
     actions : {
         setName({commit}, name){
             commit('setName', name);
+        },
+
+        setId({commit}, id){
+            commit('setId', id);
         },
         
         setToken({commit}, token){
