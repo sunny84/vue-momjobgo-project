@@ -55,8 +55,22 @@
         }),
 
         methods: {
-            submit() {
+            async submit() {
                 // 회원가입을 구현하세요.
+                if(this.user.pwd === this.user.checkPwd){
+                    const response = await this.$api('/auth/user/new', 'POST', {
+                        ...this.user
+                    });
+
+                    if(response.status === this.HTTP_CREATED){
+                        alert('회원가입 되었습니다.');
+                        this.dialog = false;
+                    }
+                    
+                } else {
+                    alert("패스워드가 일치하지 않습니다.")
+                    this.$refs.checkPwd.focus();
+                }
             }
         },
 
