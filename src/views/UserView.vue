@@ -63,6 +63,7 @@ export default {
 
         async modify(){
 
+            // 새로운 비밀번호가 입력되었을 경우 
             if(this.checkPwd !== this.user.newPwd){
                 alert("비밀번호 확인이 일치하지 않습니다.");
                 return false;
@@ -72,6 +73,7 @@ export default {
                 return false;
             }
 
+            // 유저 정보를 수정. ( 새로운 비밀번호를 입력할때 newPwd에 값을 넣으면 됨. 비밀번호를 변경하지 않을때에는 newPwd에 null 값을 넣으면 됨.)
             const response = await this.$api(`/api/auth/user`, 'patch', {
                 ...this.user,
                 newPwd : this.user.newPwd === '' ? null : this.user.newPwd
@@ -85,6 +87,8 @@ export default {
         },
 
         async deleteUser(){
+
+            // 유저 정보를 삭제.
             if(!confirm('정말로 탈퇴하시겠습니까?')){
                 return false;
             }
