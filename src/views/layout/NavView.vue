@@ -3,14 +3,14 @@
     <v-list-item>
       <v-list-item-content>
         <v-list-item-title class="text-h6">Vue-Project</v-list-item-title>
-        <v-list-item-subtitle> 님 환영합니다. </v-list-item-subtitle>
+        <v-list-item-subtitle>{{name}}님 환영합니다. </v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>
 
     <v-divider></v-divider>
 
     <v-list dense nav>
-      <v-list-item v-for="(item, key) in menuList" :key="key" :to="item.path">
+      <v-list-item v-for="(item, key) in menuList" :key="key" :to="item.path" v-show="item.meta.display">
         <v-list-item-icon>
           <v-icon>{{ item.meta.icon }}</v-icon>
         </v-list-item-icon>
@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import {mapGetters} from "vuex";
+import {mapGetters, mapActions} from "vuex";
 
 export default {
   data: () => ({
@@ -40,12 +40,15 @@ export default {
   }),
 
   computed : {  
-    ...mapGetters('page', ['menuList', 'visible'])
+    ...mapGetters('page', ['menuList', 'visible']),
+    ...mapGetters('user', ['name'])
   },
 
   methods : {
+    ...mapActions('user', ['setToken']),
+
     logout(){
-      alert('미구현입니다.');
+      this.setToken('');
     }
   }
 

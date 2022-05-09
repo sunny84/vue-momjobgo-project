@@ -1,6 +1,6 @@
 <template>
   <v-app-bar app v-if="visible.header">
-    <v-app-bar-title>{{title}}</v-app-bar-title>
+    <v-app-bar-title>{{title}}{{token}}</v-app-bar-title>
   </v-app-bar>
 </template>
 
@@ -9,7 +9,8 @@ import {mapGetters} from "vuex";
 
 export default {
   computed : {
-    ...mapGetters('page',['title', 'visible'])
+    ...mapGetters('page',['title', 'visible']),
+    ...mapGetters('user',['token'])
   }
 };
 </script>

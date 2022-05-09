@@ -1,5 +1,6 @@
 import HomeView from '@/views/HomeView.vue'
 import AboutView from '@/views/AboutView.vue'
+import LoginView from '@/views/login/LoginView.vue'
 
 export default {
 
@@ -17,7 +18,8 @@ export default {
                 name: `home`,
                 meta: {
                     title: `Home`,
-                    icon: `home`
+                    icon: `home`,
+                    display : true
                 },
                 component : HomeView
             },
@@ -27,10 +29,23 @@ export default {
                 name: `about`,
                 meta: {
                     title: `About`,
-                    icon: `question_mark`
+                    icon: `question_mark`,
+                    display : true
                 },
                 component : AboutView
+            },
+
+            login : {
+                path: `/login`,
+                name: `login`,
+                meta: {
+                    title: `Login`,
+                    icon: ``,
+                    display : false
+                },
+                component : LoginView
             }
+
         },
 
         visible : {
@@ -56,6 +71,10 @@ export default {
 
         visible(state){
             return state.visible;
+        },
+
+        getPath : (state, getters) => path => {
+            return `${getters.basePath}${state.list[path].path}`
         }
     },
 
@@ -66,6 +85,12 @@ export default {
 
         setVisible(state, {key, value}){
             state[key] = value;
+        },
+
+        setAllVisible(state, value){
+            state.visible.header = value;
+            state.visible.navi = value;
+            state.visible.footer = value;
         }
     },
 
@@ -76,7 +101,12 @@ export default {
 
         setVisible({commit}, payload){
             commit('setVisible', payload); 
+        },
+
+        setAllVisible({commit}, value){
+            commit('setAllVisible', value);
         }
+
     }
 
 }

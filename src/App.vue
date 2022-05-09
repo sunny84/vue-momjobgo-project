@@ -32,12 +32,29 @@ export default {
     },
 
     computed : {
-        ...mapGetters('page',['menuList'])
+        ...mapGetters('page',['menuList', 'basePath', 'getPath']),
+        ...mapGetters('user',['hasToken'])
+    },
+
+    methods : {
+        checkToken(){
+            const nowPath = window.location.pathname;
+
+            if( this.hasToken && nowPath !== this.getPath('home')){
+                this.$router.push({ path: this.menuList.home.path });
+            } else if (!this.hasToken && nowPath !== this.getPath('login')){
+                this.$router.push({ path: this.menuList.login.path });
+            }
+        }
     },
 
     created() {
-        if(window.location.pathname === '/'){
-            this.$router.push(this.menuList.home.path)
+        this.checkToken();
+    },
+
+    watch: {
+        'hasToken' : function() {
+            this.checkToken();
         }
     }
 
