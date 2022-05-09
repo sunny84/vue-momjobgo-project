@@ -1,5 +1,6 @@
 import HomeView from '@/views/HomeView.vue'
 import LoginView from '@/views/login/LoginView.vue'
+import UserView from '@/views/UserView.vue'
 
 export default {
 
@@ -21,6 +22,17 @@ export default {
                     display : true
                 },
                 component : HomeView
+            },
+
+            user : {
+                path: `/user`,
+                name: `user`,
+                meta: {
+                    title: `User`,
+                    icon: ``,
+                    display : true
+                },
+                component : UserView
             },
 
             login : {
