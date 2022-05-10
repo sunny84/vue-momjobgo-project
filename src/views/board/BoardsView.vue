@@ -169,7 +169,6 @@
                 },
                 { text: "제목", value: "title" },
                 { text: "추천수", value: "likeCnt" },
-                { text: "비추천수", value: "hateCnt" },
                 { text: "작성자", value: "writer" },
                 { text: "등록일", value: "createdAt" },
                 { text: "", value: "actions", sortable: false },
