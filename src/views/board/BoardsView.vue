@@ -43,7 +43,7 @@
                     
                     <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn color="blue darken-1" text @click="closePopup"> 확인 </v-btn>
+                        <v-btn color="blue darken-1" text @click="closeDetail"> 확인 </v-btn>
                     </v-card-actions>
                     </v-card>
                 </v-dialog>
@@ -139,20 +139,23 @@
         mixins : [BoardMixin, DateMixin],
 
         data: () => ({
-            
-            emotionOn : null,
 
+            // 감정표현 관련 변수.
+            emotionOn : null,
             emotionList : [
                 {icon : 'thumb_up', value : 0},
                 {icon : 'thumb_down_alt', value : 1}
             ],
 
+            //dialog 관련 변수.
             dialogEdit: false,
             dialogDelete: false,
             dialgDetail : false,
 
+            //검색창.
             search : '',
 
+            //테이블 헤더.
             headers: [
                 {
                     text: "게시물 번호",
@@ -166,14 +169,17 @@
                 { text: "등록일", value: "createdAt" },
                 { text: "", value: "actions", sortable: false },
             ],
+            //게시물 list
             boards: [],
 
+            // 선택된 게시물
             selectedIndex: -1,
             selectedItem: {
                 bno: 0,
                 title: "",
                 contents: "",
             },
+            // 선택된 게시물 초기화 item
             defaultItem: {
                 bno : 0,
                 title: "",
@@ -206,7 +212,7 @@
                 val || this.closeDelete();
             },
             dialgDetail(val) {
-                val || this.closePopup();
+                val || this.closeDetail();
             }
         },
 
@@ -227,6 +233,7 @@
                  */
             },
 
+            // 상세정보 보기 모달 창 on
             popDetailModal(item) {
                 this.selectedIndex = this.boards.indexOf(item);
                 this.selectedItem = Object.assign({}, item);
@@ -234,12 +241,14 @@
                 this.dialgDetail = true;
             },
 
+            // 글등록 or 수정 모달 창 on
             popEditModal(item) {
                 this.selectedIndex = this.boards.indexOf(item);
                 this.selectedItem = Object.assign({}, item);
                 this.dialogEdit = true;
             },
 
+            // 삭제여부 모달 창 on
             popDeleteModal(item) {
                 this.selectedIndex = this.boards.indexOf(item);
                 this.selectedItem = Object.assign({}, item);
@@ -251,23 +260,27 @@
                  * 게시물 삭제 구현.
                  */
             },
-            
+
+            // 글 등록 or 수정 모달 닫기.
             closeEdit() {
                 this.dialogEdit = false;
                 this.clearSelectedItem();
             },
 
-            closePopup() {
+            // 글 상세 정보 모달 닫기
+            closeDetail() {
                 this.dialgDetail = false;
                 this.clearSelectedItem();
             },
 
+            // 삭제 여부 모달 닫기
             closeDelete() {
                 this.dialogDelete = false;
                 this.selectedItem = Object.assign({}, this.defaultItem);
                 this.clearSelectedItem();
             },
 
+            // SelectedItem 관련 필드 초기화
             clearSelectedItem(){
                 this.selectedItem = Object.assign({}, this.defaultItem);
                 this.selectedIndex = -1;
