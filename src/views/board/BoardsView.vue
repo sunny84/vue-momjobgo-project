@@ -165,6 +165,7 @@
                 },
                 { text: "제목", value: "title" },
                 { text: "추천수", value: "likeCnt" },
+                // 비 추천수 추가 ( hateCnt )
                 { text: "작성자", value: "writer" },
                 { text: "등록일", value: "createdAt" },
                 { text: "", value: "actions", sortable: false },
@@ -296,9 +297,6 @@
                      * 글 신규등록.
                      */
                 }
-
-                this.callBoards();
-                this.closeEdit();
             },
 
             // 댓글이 업데이트 될 때 실행.
