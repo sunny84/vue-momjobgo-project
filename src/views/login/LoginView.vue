@@ -67,13 +67,8 @@
                 if(response?.status === this.HTTP_OK){
                     const token = response.data.token;
                     this.setToken(token);
-                    
-                    // 로그인을 한 이후 회원정보를 가져와 vuex 유저에 등록하세요.
-                    const {data : user} = await this.$api(`/api/auth/user`, 'get')
-                    this.setId(user.id);
-                    this.setName(user.name);
+                    location.href='/home'
                 } 
-                
             }
         },
 
