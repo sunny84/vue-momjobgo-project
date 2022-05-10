@@ -23,8 +23,6 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
-
 export default {
 
     data() {
@@ -46,24 +44,12 @@ export default {
 
     methods: {
 
-        ...mapActions('user', ['setName', 'setId', 'setToken']),
-
         async refreshUser(){
             /**
              * 유저 정보 조회 구현.
              * 
              * vuex 유저정보 갱신 및 text-field 초기화.
              */
-
-            const {data : user} = await this.$api(`/api/auth/user`, 'get')
-            this.setId(user.id);
-            this.setName(user.name);
-
-            this.user.id = user.id;
-            this.user.name = user.name;
-            this.user.pwd = '';
-            this.user.newPwd = '';
-            this.checkPwd = '';
         },
 
         async modify(){
@@ -74,50 +60,15 @@ export default {
              * 새로운 비밀번호 입력 시 비밀번호 확인과 일치해야한다.
              * 수정 여부를 확인 한 후 수정한다.
              */
-            
-            if(this.checkPwd !== this.user.newPwd){
-                alert("비밀번호 확인이 일치하지 않습니다.");
-                return false;
-            }
-
-            if(!confirm('정말로 수정하시겠습니까?')){
-                return false;
-            }
-
-            const response = await this.$api(`/api/auth/user`, 'patch', {
-                ...this.user,
-                newPwd : this.user.newPwd === '' ? null : this.user.newPwd
-            });
-
-            if(response.status === this.HTTP_OK || response.status === this.HTTP_CREATED){
-                alert("수정 되었습니다.");
-                this.refreshUser();
-            }
-
         },
 
         async deleteUser(){
-
             /**
              * 유저 정보 삭제 구현.
              * 
              * 삭제 여부를 확인 한 후 삭제한다.
              */
-            
-            if(!confirm('정말로 탈퇴하시겠습니까?')){
-                return false;
-            }
-
-            const response = await this.$api(`/api/auth/user`, 'delete');
-            if(response.status === this.HTTP_OK){
-                alert('삭제 되었습니다.');
-                this.setToken('');
-            }
         }
     },
-
-
-
-
 }
 </script>
