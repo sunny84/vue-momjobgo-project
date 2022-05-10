@@ -4,6 +4,7 @@ import CountView from '@/views/CountView.vue'
 import CalculateView from '@/views/CalculateView.vue'
 import AxiosView from '@/views/AxiosView.vue';
 import SignUpView from '@/views/SignUpView.vue';
+import LoginView from '@/views/LoginView.vue';
 
 export default {
 
@@ -74,6 +75,16 @@ export default {
                     icon: `edit`,
                 },
                 component : SignUpView,
+            },
+
+            login: {
+                path: `/login`,
+                name: `login`,
+                meta: {
+                    title: `Login`,
+                    icon: `login`,
+                },
+                component : LoginView,
             },
         },
 
