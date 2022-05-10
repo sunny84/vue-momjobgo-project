@@ -2,6 +2,7 @@ import HomeView from '@/views/HomeView.vue'
 import AboutView from '@/views/AboutView.vue'
 import CountView from '@/views/CountView.vue'
 import CalculateView from '@/views/CalculateView.vue'
+import AxiosView from '@/views/AxiosView.vue';
 
 export default {
 
@@ -34,7 +35,7 @@ export default {
                 component : CountView
             },
 
-            math : {
+            calculate : {
                 path: `/calculate`,
                 name: `calculate`,
                 meta: {
@@ -52,7 +53,17 @@ export default {
                     icon: `info`
                 },
                 component : AboutView
-            }
+            }, 
+
+            axios: {
+                path: `/axios`,
+                name: `axios`,
+                meta: {
+                    title: `Axios`,
+                    icon: `search`,
+                },
+                component : AxiosView,
+            },
         },
 
         visible : {
