@@ -26,6 +26,7 @@
 
                     <v-card-text>
                         <v-container>
+                        <!-- textarea로 저장된 문자열은 \n\r로 줄바꿈을 하는데 html에서는 <br>로 변형해주어야 한다. nl2br이 그러한 역할을 한다.-->
                         <v-card-text v-html="$nl2br(selectedItem.contents)" style="border-style: ridge;"></v-card-text>
                         <v-card-text>
                             <v-icon 
