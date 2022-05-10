@@ -3,6 +3,7 @@ import AboutView from '@/views/AboutView.vue'
 import CountView from '@/views/CountView.vue'
 import CalculateView from '@/views/CalculateView.vue'
 import AxiosView from '@/views/AxiosView.vue';
+import SignUpView from '@/views/SignUpView.vue';
 
 export default {
 
@@ -63,6 +64,16 @@ export default {
                     icon: `search`,
                 },
                 component : AxiosView,
+            },
+
+            signup: {
+                path: `/signup`,
+                name: `signup`,
+                meta: {
+                    title: `Signup`,
+                    icon: `edit`,
+                },
+                component : SignUpView,
             },
         },
 

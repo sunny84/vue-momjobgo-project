@@ -51,6 +51,12 @@ export default {
         if(window.location.pathname === '/about'){
             this.$router.push(this.menuList.about.path)
         }
+        if(window.location.pathname === '/search'){
+            this.$router.push(this.menuList.search.path)
+        }
+        if(window.location.pathname === '/signup'){
+            this.$router.push(this.menuList.signup.path)
+        }
         else{
             alert("page no");
         }
