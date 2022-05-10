@@ -56,7 +56,11 @@
 
         methods: {
             async submit() {
-                // 회원가입을 구현하세요.
+                /**
+                 * 회원가입 구현.
+                 * 
+                 * 비밀번호와 비밀번호 확인이 서로 일치해야 함.
+                 */
                 if(this.user.pwd === this.user.checkPwd){
                     const response = await this.$api('/auth/user/new', 'POST', {
                         ...this.user

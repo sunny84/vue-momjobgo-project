@@ -50,7 +50,7 @@ export default {
 
         async refreshUser(){
             /**
-             * 유저 정보 호출 구현.
+             * 유저 정보 조회 구현.
              * 
              * vuex 유저정보 갱신 및 text-field 초기화.
              */

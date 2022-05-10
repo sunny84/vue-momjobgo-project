@@ -25,7 +25,7 @@
                     v-for="item in commentList"
                     :key="item.name"
                 >
-                    <td style="max-width: 400px;">{{ item.comment }}<v-icon v-if="userInfo.id === item.writer" small @click="deleteComment(item.id)">delete</v-icon></td>
+                    <td style="max-width: 400px;">{{ item.comment }}<v-icon v-if="id === item.writer" small @click="deleteComment(item.id)">delete</v-icon></td>
                     <td class="text-right">{{ new Date(item.createdAt) | getWriteTime }}</td>
                     <td class="text-right">{{ item.writer }}</td>
                 </tr>
@@ -60,6 +60,9 @@
 
         methods : {
             async callCommentList() {
+                /**
+                 * 댓글 조회.
+                 */
                 if(this.bno !== 0){
                     const response = await this.$api(`/api/board/comment/${this.bno}`, 'GET', null);
                     if(response.status === this.HTTP_OK){
@@ -69,6 +72,9 @@
             },
 
             async postComment(){
+                /**
+                 * 댓글 등록.
+                 */
                 if(this.newComment){
                     const response = await this.$api(`/api/board/comment/${this.bno}`,'POST',{comment : this.newComment});
                     if(response.status === this.HTTP_OK || response.status === this.HTTP_CREATED){
@@ -83,6 +89,9 @@
             },
 
             async deleteComment(id){
+                /**
+                 * 댓글 삭제.
+                 */
                 if(!confirm('댓글을 삭제 하시겠습니까?')){
                     return false;
                 }
@@ -94,7 +103,6 @@
                     this.callCommentList();
                     this.refreshBoardList();
                 }
-
             },
 
             refreshBoardList(){
@@ -109,13 +117,7 @@
         },
 
         computed : {
-            ...mapGetters(['userInfo'])
+            ...mapGetters('user', ['id'])
         }
-
-
     }
 </script>
-
-<style lang="stylus" scoped>
-
-</style>

@@ -15,28 +15,29 @@
                 <v-spacer></v-spacer>
 
                 <!-- 글 상세 정보 alert -->
-                <v-dialog v-model="popup" max-width="800px">
+                <v-dialog v-model="dialgDetail" max-width="800px">
                     <v-card>
                     <v-card-title>
                     </v-card-title>
 
                     <v-card-subtitle>
-                        <span class="text-h6">{{ editedItem.title }}</span>
+                        <span class="text-h6">{{ selectedItem.title }}</span>
                     </v-card-subtitle>
 
                     <v-card-text>
                         <v-container>
-                        <v-card-text v-html="$nl2br(editedItem.contents)" style="border-style: ridge;"></v-card-text>
+                        <v-card-text v-html="$nl2br(selectedItem.contents)" style="border-style: ridge;"></v-card-text>
                         <v-card-text>
                             <v-icon 
                                 v-for="(emotion, index) in emotionList"
                                 :key="index" 
-                                :color="emotion.on ? 'red' : ''"
+                                :color="emotion.value === emotionOn ? 'red' : ''"
                                 @click="clickEmotion(emotion, index)"
+                                :style="{'margin-right' : '10px'}"
                                 >{{emotion.icon}}
                             </v-icon>
                         </v-card-text>
-                        <BoardCommentsViewVue :bno="detailBno" @updated="updatedComment"></BoardCommentsViewVue>
+                        <BoardCommentsViewVue :bno="selectedItem.bno" @updated="updatedComment"></BoardCommentsViewVue>
                         </v-container>
                     </v-card-text>
                     
@@ -48,7 +49,7 @@
                 </v-dialog>
 
                 <!-- 글 등록 alert -->
-                <v-dialog v-model="dialog" max-width="500px">
+                <v-dialog v-model="dialogEdit" max-width="500px">
                     <template #activator="{ on, attrs }">
                         <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
                             글 등록
@@ -65,14 +66,14 @@
                                 <v-col cols="12">
                                 <v-text-field
                                     label="제목"
-                                    v-model="editedItem.title"
+                                    v-model="selectedItem.title"
                                 ></v-text-field>
                                 </v-col>
                                 <v-col cols="12">
                                 <v-textarea
                                     outlined
                                     label="내용"
-                                    v-model="editedItem.contents"
+                                    v-model="selectedItem.contents"
                                 ></v-textarea>
                                 </v-col>
                             </v-row>
@@ -81,7 +82,7 @@
 
                         <v-card-actions>
                             <v-spacer></v-spacer>
-                            <v-btn color="blue darken-1" text @click="close"> 취소 </v-btn>
+                            <v-btn color="blue darken-1" text @click="closeEdit"> 취소 </v-btn>
                             <v-btn color="blue darken-1" text @click="save"> 저장 </v-btn>
                         </v-card-actions>
                     </v-card>
@@ -94,7 +95,7 @@
                     <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn color="blue darken-1" text @click="closeDelete">취소</v-btn>
-                        <v-btn color="blue darken-1" text @click="deleteItemConfirm">삭제</v-btn>
+                        <v-btn color="blue darken-1" text @click="deleteItem">삭제</v-btn>
                         <v-spacer></v-spacer>
                     </v-card-actions>
                     </v-card>
@@ -105,7 +106,7 @@
 
         <!-- 테이블 제목 -->
         <template #item.title="{ item }">
-            <span style="cursor: pointer;" @click="popupItem(item)"> 
+            <span style="cursor: pointer;" @click="popDetailModal(item)"> 
                 {{item.title}} 
                 <template v-if="item.commentCnt > 0">
                     ({{item.commentCnt}})
@@ -121,8 +122,8 @@
         <!-- 테이블 동작 -->
         <template #item.actions="{ item }">
             <template v-if="userId === item.writer">
-                <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
-                <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+                <v-icon small @click="popEditModal(item)" class="mr-2"> mdi-pencil </v-icon>
+                <v-icon small @click="popDeleteModal(item)"> mdi-delete </v-icon>
             </template>
         </template>
 
@@ -146,15 +147,17 @@
 
         data: () => ({
             
+            emotionOn : null,
+
             emotionList : [
-                {icon : 'favorite', on : false, value : 0}
+                {icon : 'thumb_up', value : 0},
+                {icon : 'thumb_down_alt', value : 1}
             ],
 
-            detailBno : 0,
-
-            dialog: false,
+            dialogEdit: false,
             dialogDelete: false,
-            popup : false,
+            dialgDetail : false,
+
             search : '',
 
             headers: [
@@ -172,8 +175,8 @@
             ],
             boards: [],
 
-            editedIndex: -1,
-            editedItem: {
+            selectedIndex: -1,
+            selectedItem: {
                 bno: 0,
                 title: "",
                 contents: "",
@@ -194,18 +197,22 @@
             ...mapGetters('user', {userId : 'id'}),
 
             formTitle(){
-                return this.editedIndex === -1 ? '글 등록' : '글 수정'
+                return this.isModify ? '글 수정' : '글 등록'
+            },
+
+            isModify() {
+                return this.selectedIndex > -1
             }
         },
 
         watch: {
-            dialog(val) {
-                val || this.close();
+            dialogEdit(val) {
+                val || this.closeEdit();
             },
             dialogDelete(val) {
                 val || this.closeDelete();
             },
-            popup(val) {
+            dialgDetail(val) {
                 val || this.closePopup();
             }
         },
@@ -223,7 +230,7 @@
                 /**
                  * 게시판 목록 호출.
                  * 
-                 * boards 항목에 응답 결과를 대입해준다.
+                 * boards에 응답 결과를 대입해준다.
                  */
                 const response = await this.$api("/api/board", "get");
 
@@ -232,28 +239,27 @@
                 }
             },
 
-            popupItem(item) {
-                this.detailBno = item.bno;
+            popDetailModal(item) {
+                this.selectedIndex = this.boards.indexOf(item);
+                this.selectedItem = Object.assign({}, item);
                 this.callEmotion();
-                this.editedIndex = this.boards.indexOf(item);
-                this.editedItem = Object.assign({}, item);
-                this.popup = true;
+                this.dialgDetail = true;
             },
 
-            editItem(item) {
-                this.editedIndex = this.boards.indexOf(item);
-                this.editedItem = Object.assign({}, item);
-                this.dialog = true;
+            popEditModal(item) {
+                this.selectedIndex = this.boards.indexOf(item);
+                this.selectedItem = Object.assign({}, item);
+                this.dialogEdit = true;
             },
 
-            deleteItem(item) {
-                this.editedIndex = this.boards.indexOf(item);
-                this.editedItem = Object.assign({}, item);
+            popDeleteModal(item) {
+                this.selectedIndex = this.boards.indexOf(item);
+                this.selectedItem = Object.assign({}, item);
                 this.dialogDelete = true;
             },
 
-            async deleteItemConfirm() {
-                const bno = this.editedItem.bno;
+            async deleteItem() {
+                const bno = this.selectedItem.bno;
 
                 const response = await this.$api(`/api/board/${bno}`, 'delete')
                 if(response.status === this.HTTP_OK){
@@ -265,96 +271,85 @@
 
             },
 
-            close() {
-                this.dialog = false;
-                this.clearEditItem();
+            closeEdit() {
+                this.dialogEdit = false;
+                this.clearSelectedItem();
             },
 
             closePopup() {
-                this.popup = false;
-                this.clearEditItem();
-            },
-
-            clearEditItem(){
-                this.$nextTick(() => {
-                    this.editedItem = Object.assign({}, this.defaultItem);
-                    this.editedIndex = -1;
-                });
+                this.dialgDetail = false;
+                this.clearSelectedItem();
             },
 
             closeDelete() {
                 this.dialogDelete = false;
-                this.$nextTick(() => {
-                    this.editedItem = Object.assign({}, this.defaultItem);
-                    this.editedIndex = -1;
-                });
+                this.selectedItem = Object.assign({}, this.defaultItem);
+                this.clearSelectedItem();
+            },
+
+            clearSelectedItem(){
+                this.selectedItem = Object.assign({}, this.defaultItem);
+                this.selectedIndex = -1;
             },
 
             async save() {
-                if (this.editedIndex > -1) {
-                    // 수정
+                if (this.isModify) {
+                    /**
+                     * 글 수정.
+                     */
                     const response = await this.$api("/api/board", "PATCH", {
-                        bno: this.editedItem.bno,
-                        title: this.editedItem.title,
-                        contents: this.editedItem.contents,
+                        bno: this.selectedItem.bno,
+                        title: this.selectedItem.title,
+                        contents: this.selectedItem.contents,
                     });
 
                     if(response.status === this.HTTP_OK || response.status === this.HTTP_CREATED){
                         alert("수정되었습니다.");
-                        this.dialog = false;
+                        this.dialogEdit = false;
                     }
                 } else {
-                    // 신규 등록
+
+                    /**
+                     * 글 신규등록.
+                     */
                     const response = await this.$api("/api/board", "POST", {
-                        title: this.editedItem.title,
-                        contents: this.editedItem.contents,
+                        title: this.selectedItem.title,
+                        contents: this.selectedItem.contents,
                     });
 
                     if(response.status === this.HTTP_OK || response.status === this.HTTP_CREATED){
                         alert("등록되었습니다.");
-                        this.dialog = false;
+                        this.dialogEdit = false;
                     }
                 }
 
                 this.callBoards();
-                this.close();
+                this.closeEdit();
             },
 
             updatedComment(){
+                // 댓글이 업데이트 될 때 실행.
                 this.callBoards();
             },
 
             async callEmotion(){
-                const response = await this.$api(`/api/board/emotion/${this.detailBno}`, 'GET', null);
+                /**
+                 * 좋아요 불러오기.
+                 */
+                const response = await this.$api(`/api/board/emotion/${this.selectedItem.bno}`, 'GET', null);
 
                 if(response.status === this.HTTP_OK){
-                    
-                    const emotion = response.data.emotion;
-                    if(emotion != null){
-                        this.emotionList[emotion].on = true;
-                    } else {
-                        this.emotionList.forEach(emotion => emotion.on = false);
-                    }
-
+                    this.emotionOn = response.data.emotion;
                 }
             },
 
-            clickEmotion(item, index){
-                item.on = !item.on;
-
-                this.emotionList.forEach((emotion, idx)=> {
-                    if(!index === idx){
-                        emotion.on = false;
-                    }
-                });
-
-                if(item.on){
-                    this.$api(`/api/board/emotion/${this.detailBno}`, 'POST', {emotion : item.value});
-                } else {
-                    this.$api(`/api/board/emotion/${this.detailBno}`, 'POST', {emotion : null});
-                } 
-
-                
+            async clickEmotion(item, index){
+                /**
+                 * 감정표현 클릭.
+                 */
+                this.emotionOn = this.emotionOn === item.value ? null : item.value;
+                await this.$api(`/api/board/emotion/${this.selectedItem.bno}`, 'POST', {emotion : this.emotionOn})
+                this.callBoards();                
             },
 
         }
