@@ -5,6 +5,7 @@ import CalculateView from '@/views/CalculateView.vue'
 import AxiosView from '@/views/AxiosView.vue';
 import SignUpView from '@/views/SignUpView.vue';
 import LoginView from '@/views/LoginView.vue';
+import DeleteView from '@/views/DeleteView.vue';
 
 export default {
 
@@ -85,6 +86,16 @@ export default {
                     icon: `login`,
                 },
                 component : LoginView,
+            },
+
+            delete: {
+                path: `/delete`,
+                name: `delete`,
+                meta: {
+                    title: `Delete`,
+                    icon: `delete`,
+                },
+                component : DeleteView,
             },
         },
 

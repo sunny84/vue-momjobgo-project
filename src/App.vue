@@ -60,6 +60,9 @@ export default {
         if(window.location.pathname === '/login'){
             this.$router.push(this.menuList.login.path)
         }
+        if(window.location.pathname === '/delete'){
+            this.$router.push(this.menuList.delete.path)
+        }
         else{
             alert("page no");
         }
