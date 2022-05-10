@@ -25,7 +25,9 @@
                     v-for="item in commentList"
                     :key="item.name"
                 >
+                    <!-- 작성자와 현재 로그인 한 유저가 일치할 때 삭제 아이콘 보이도록 함.-->
                     <td style="max-width: 400px;">{{ item.comment }}<v-icon v-if="id === item.writer" small @click="deleteComment(item.id)">delete</v-icon></td>
+                    <!-- 시간을 나열한 순서대로 조건을 적용한다. 1시간 이내 ?분전으로 표기, 24시간 이내 ?시간전으로 표기, yyyy-MM-dd HH:mm:ss로 표기 .-->
                     <td class="text-right">{{ new Date(item.createdAt) | getWriteTime }}</td>
                     <td class="text-right">{{ item.writer }}</td>
                 </tr>
