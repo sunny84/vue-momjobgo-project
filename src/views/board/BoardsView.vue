@@ -105,6 +105,7 @@
         </template>
 
         <!-- 테이블 제목 -->
+        <!-- 테이블 제목 클릭시 popDetailModal(item) 메소드를 호출하도록 구현, 댓글 갯수가 제목 옆에 보이도록 구현.-->
         <template #item.title="{ item }">
             <span style="cursor: pointer;" @click="popDetailModal(item)"> 
                 {{item.title}} 
