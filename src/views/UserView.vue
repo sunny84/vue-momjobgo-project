@@ -49,7 +49,12 @@ export default {
         ...mapActions('user', ['setName', 'setId', 'setToken']),
 
         async refreshUser(){
-            // 유저 정보를 호출하고 vuex의 유저정보를 같이 갱신해 준다.
+            /**
+             * 유저 정보 호출 구현.
+             * 
+             * vuex 유저정보 갱신 및 text-field 초기화.
+             */
+
             const {data : user} = await this.$api(`/api/auth/user`, 'get')
             this.setId(user.id);
             this.setName(user.name);
@@ -62,8 +67,14 @@ export default {
         },
 
         async modify(){
-
-            // 새로운 비밀번호가 입력되었을 경우 
+            /**
+             * 유저 정보 수정 구현.
+             * 
+             * 새로운 비밀번호를 입력하지 않으면 이름만 변경된다.
+             * 새로운 비밀번호 입력 시 비밀번호 확인과 일치해야한다.
+             * 수정 여부를 확인 한 후 수정한다.
+             */
+            
             if(this.checkPwd !== this.user.newPwd){
                 alert("비밀번호 확인이 일치하지 않습니다.");
                 return false;
@@ -73,7 +84,6 @@ export default {
                 return false;
             }
 
-            // 유저 정보를 수정. ( 새로운 비밀번호를 입력할때 newPwd에 값을 넣으면 됨. 비밀번호를 변경하지 않을때에는 newPwd에 null 값을 넣으면 됨.)
             const response = await this.$api(`/api/auth/user`, 'patch', {
                 ...this.user,
                 newPwd : this.user.newPwd === '' ? null : this.user.newPwd
@@ -88,7 +98,12 @@ export default {
 
         async deleteUser(){
 
-            // 유저 정보를 삭제.
+            /**
+             * 유저 정보 삭제 구현.
+             * 
+             * 삭제 여부를 확인 한 후 삭제한다.
+             */
+            
             if(!confirm('정말로 탈퇴하시겠습니까?')){
                 return false;
             }

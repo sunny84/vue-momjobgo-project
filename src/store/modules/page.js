@@ -1,6 +1,7 @@
 import HomeView from '@/views/HomeView.vue'
 import LoginView from '@/views/login/LoginView.vue'
 import UserView from '@/views/UserView.vue'
+import BoardView from '@/views/board/BoardsView.vue'
 
 export default {
 
@@ -23,7 +24,18 @@ export default {
                 },
                 component : HomeView
             },
-
+            
+            board : {
+                path: `/board`,
+                name: `board`,
+                meta: {
+                    title: `Board`,
+                    icon: `table_rows`,
+                    display : true
+                },
+                component : BoardView
+            },
+            
             user : {
                 path: `/user`,
                 name: `user`,
@@ -44,7 +56,8 @@ export default {
                     display : false
                 },
                 component : LoginView
-            }
+            },
+
 
         },
 

@@ -41,15 +41,22 @@ export default {
 
         checkToken(){
             const nowPath = window.location.pathname;
-
+            // 현재 토큰이 있는지 확인 .
             if( this.hasToken && nowPath !== this.getPath('home')){
+                // 토큰이 존재할 때 홈으로 이동.
                 this.$router.push({ path: this.menuList.home.path });
             } else if (!this.hasToken && nowPath !== this.getPath('login')){
+                // 토큰이 없을 때 로그인 페이지로 이동.
                 this.$router.push({ path: this.menuList.login.path });
             }
         },
 
-        async getUserInfo(){    
+        async getUserInfo(){
+            /**
+             * 토큰이 있을 때 유저 정보 호출 구현.
+             * 
+             * vuex 유저정보 갱신
+             */
             if(this.hasToken){
                 const {data : user} = await this.$api(`/api/auth/user`, 'get');
                 this.setId(user.id);

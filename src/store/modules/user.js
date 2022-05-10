@@ -11,6 +11,10 @@ export default {
     },
 
     getters : {
+        id(state){
+            return state.user.id;
+        },
+
         name(state){
             return state.user.name;
         },
@@ -35,7 +39,7 @@ export default {
         },
 
         setId(state, id){
-            state.id = id;
+            state.user.id = id;
         },
     },
 
