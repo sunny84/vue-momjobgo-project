@@ -169,6 +169,7 @@
                 },
                 { text: "제목", value: "title" },
                 { text: "추천수", value: "likeCnt" },
+                { text: "비추천수", value: "hateCnt" },
                 { text: "작성자", value: "writer" },
                 { text: "등록일", value: "createdAt" },
                 { text: "", value: "actions", sortable: false },
@@ -259,6 +260,9 @@
             },
 
             async deleteItem() {
+                /**
+                 * 게시물 삭제 구현.
+                 */
                 const bno = this.selectedItem.bno;
 
                 const response = await this.$api(`/api/board/${bno}`, 'delete')
@@ -268,7 +272,6 @@
                 }
 
                 this.closeDelete();
-
             },
 
             closeEdit() {
@@ -308,7 +311,6 @@
                         this.dialogEdit = false;
                     }
                 } else {
-
                     /**
                      * 글 신규등록.
                      */
@@ -327,8 +329,8 @@
                 this.closeEdit();
             },
 
+            // 댓글이 업데이트 될 때 실행.
             updatedComment(){
-                // 댓글이 업데이트 될 때 실행.
                 this.callBoards();
             },
 

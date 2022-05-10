@@ -74,9 +74,11 @@
             async postComment(){
                 /**
                  * 댓글 등록.
+                 * 
+                 * 댓글 입력란에 값이 없으면 '댓글을 입력해주세요 alert'
                  */
                 if(this.newComment){
-                    const response = await this.$api(`/api/board/comment/${this.bno}`,'POST',{comment : this.newComment});
+                    const response = await this.$api(`/api/board/comment/${this.bno}`,'POST', {comment : this.newComment});
                     if(response.status === this.HTTP_OK || response.status === this.HTTP_CREATED){
                         alert('댓글 등록되었습니다.');
                         this.callCommentList();
@@ -91,6 +93,8 @@
             async deleteComment(id){
                 /**
                  * 댓글 삭제.
+                 * 
+                 * 댓글 삭제 여부 확인.
                  */
                 if(!confirm('댓글을 삭제 하시겠습니까?')){
                     return false;
@@ -105,6 +109,7 @@
                 }
             },
 
+            // 상위 게시판 컴포넌트에 댓글 업데이트를 알림.
             refreshBoardList(){
                 this.$emit('updated');
             }
