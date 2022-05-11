@@ -1,12 +1,22 @@
 export default {
     methods : { 
+        /**
+         * Date to yyyy-MM-dd HH:mm:ss
+         * @param {*} dateObj 
+         * @returns 
+         */
         toYmdHms(dateObj){
             return toYmdHms(dateObj);
         }
     },
 
     filters : {
-
+        
+        /**
+         * 한시간 이내는 ?분전, 하루 이내는 ?시간 전 그외는 yyyy-MM-dd HH:mm:ss 로 변경해줌.
+         * @param {*} dateObj 
+         * @returns 
+         */
         getWriteTime(dateObj){
             const now = new Date();
             const diff = now.getTime() - dateObj.getTime();
@@ -24,6 +34,11 @@ export default {
 
         },
 
+        /**
+         * Date to yyyy-MM-dd HH:mm:ss
+         * @param {*} dateObj 
+         * @returns 
+         */
         time2YmdHms(dateObj){
             return toYmdHms(dateObj);
         },

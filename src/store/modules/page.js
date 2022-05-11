@@ -9,10 +9,13 @@ export default {
 
     state : {
 
+        // header 부분의 제목.
         title : '',
 
+        // basepath가 있다면 지정.
         basePath : '',
 
+        // router와 nav의 목록 리스트에 동시에 적용되는 list, display에 nav노출이 결정된다.
         list : {
             home : {
                 path: `/home`,
@@ -58,9 +61,9 @@ export default {
                 component : LoginView
             },
 
-
         },
 
+        // 템플릿 태그들의 존재 유무를 결정함.
         visible : {
             header : true,
             navi : true,
@@ -86,18 +89,15 @@ export default {
             return state.visible;
         },
 
-        getPath : (state, getters) => path => {
-            return `${getters.basePath}${state.list[path].path}`
+        // list의 object키를 파라미터로 받으면 해당 키에 대한 path를 베이스 path와 합쳐서 반환.
+        getPath : (state, getters) => listKey => {
+            return `${getters.basePath}${state.list[listKey].path}`
         }
     },
 
     mutations : {
         setTitle(state, title){
             state.title = title;
-        },
-
-        setVisible(state, {key, value}){
-            state[key] = value;
         },
 
         setAllVisible(state, value){
@@ -112,10 +112,11 @@ export default {
             commit('setTitle', title);
         },
 
-        setVisible({commit}, payload){
-            commit('setVisible', payload); 
-        },
-
+        /**
+         * template에 해당하는 태그들의 유무를 컨트롤
+         * @param {*} param0 
+         * @param {*} value 
+         */
         setAllVisible({commit}, value){
             commit('setAllVisible', value);
         }

@@ -10,6 +10,7 @@ export default {
 
     methods: {
         /**
+         * 공통 통신 함수 header에 토큰을 포함하여 전송함.
          * @param {*} url 
          * @param {*} method 
          * @param {*} data paramter 
