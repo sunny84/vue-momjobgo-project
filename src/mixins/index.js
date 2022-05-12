@@ -32,7 +32,6 @@ export default {
 
                     alert('로그인 정보가 만료되었습니다.');
                     // 토큰을 비워준다. 
-                    store.dispatch('user/setToken', null);
 
                 } else if(errorCallback){
                     errorCallback(e.response);
