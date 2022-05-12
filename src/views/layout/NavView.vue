@@ -45,7 +45,6 @@ export default {
   },
 
   methods : {
-    ...mapActions('user', ['setToken']),
 
     logout(){
       /**
