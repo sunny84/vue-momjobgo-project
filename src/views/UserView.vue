@@ -23,6 +23,8 @@
 </template>
 
 <script>
+import { mapActions } from "vuex"
+import store from '@/store'
 export default {
 
     data() {
@@ -43,6 +45,7 @@ export default {
     },
 
     methods: {
+        ...mapActions('user', ['setToken', 'setUserId', 'setUserName']),
 
         async refreshUser(){
             /**
@@ -50,6 +53,15 @@ export default {
              * 
              * vuex 유저정보 갱신 및 text-field 초기화.
              */
+            const {data : user} = await this.$api('/api/auth/user', 'get');
+            this.setUserId(user.id);
+            this.setUserName(user.name);
+
+            this.user.id = user.id;
+            this.user.name = user.name;
+            // this.user.pwd = '';
+            // this.user.newPwd = '';
+            // this.checkPwd = '';
         },
 
         async modify(){
@@ -59,7 +71,24 @@ export default {
              * 새로운 비밀번호를 입력하지 않으면 이름만 변경된다.
              * 새로운 비밀번호 입력 시 비밀번호 확인과 일치해야한다.
              * 수정 여부를 확인 한 후 수정한다.
-             */
+             */            
+            if (this.user.newPwd !== this.checkPwd) {
+                alert('비밀번호가 일치하지 않습니다.');
+                return false;
+            }
+
+            if(!confirm('정말로 수정 하시겠습니까?')){
+                return false;
+            }
+            const response = await this.$api('/api/auth/user', 'patch', {
+                ...this.user,
+                newPwd : this.user.newPwd === '' ? null : this.user.newPwd 
+            });
+
+            if(response.status === this.HTTP_OK || response.status === this.HTTP_CREATED){
+                alert("수정 되었습니다.");
+                this.refreshUser();
+            }
         },
 
         async deleteUser(){
@@ -68,6 +97,14 @@ export default {
              * 
              * 삭제 여부를 확인 한 후 삭제한다.
              */
+            if(!confirm('정말로 삭제 하시겠습니까?')){
+                return false;
+            }
+            const response = await this.$api(`/api/auth/user`, 'delete');
+            if(response.status === this.HTTP_OK){
+                alert('삭제되었습니다.')
+                this.setToken('');
+            }
         }
     },
 }

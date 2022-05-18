@@ -37,6 +37,7 @@
     import SignUpModalViewVue from "./SignUpModalView.vue";
 
     import { mapActions } from "vuex"
+    import axios from "axios"
 
     export default {
         data : () => ({
@@ -54,7 +55,8 @@
         },
 
         methods : {
-            ...mapActions('page', ['setAllVisible']),
+            ...mapActions('page', ['menuList', 'setAllVisible']),
+            ...mapActions('user', ['setToken']),
 
             async login() {
                 /**
@@ -63,6 +65,16 @@
                  * 로그인 한 후 발급된 토큰을 vuex에 저장
                  * 로그인 성공 후 location.href='/'
                  */
+                try {
+                    const response = await axios.post('https://api.devcury.kr/auth/user', {
+                        id : this.id,
+                        pwd : this.password
+                    });
+                    this.setToken(response.data.token);
+                    this.$router.push({ path: '/' });
+                } catch (error) {
+                    console.error(error);
+                }
             }
         },
 

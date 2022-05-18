@@ -33,7 +33,7 @@ export default {
 
     computed : {
         ...mapGetters('page',['menuList', 'basePath', 'getPath']),
-        ...mapGetters('user',['hasToken'])
+        ...mapGetters('user',['hasToken', 'setUserId', 'setUserName'])
     },
 
     methods : {
@@ -56,6 +56,11 @@ export default {
              * 
              * vuex 유저정보 갱신
              */
+            if (this.hasToken) {
+                const { data: user } = await this.$api(`/api/auth/user`, "get");
+                this.setUserId(user.id);
+                this.setUserName(user.name);
+            }
         }
     },
 

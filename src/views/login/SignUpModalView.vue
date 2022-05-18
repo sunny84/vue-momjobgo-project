@@ -61,6 +61,18 @@
                  * 
                  * 비밀번호와 비밀번호 확인이 서로 일치해야 함.
                  */
+                if (this.user.pwd === this.user.checkPwd) {
+                    const response = await this.$api('/auth/user/new', 'post', {
+                        ...this.user
+                    });
+                    if(response.status === this.HTTP_OK || response.status === this.HTTP_CREATED){
+                        alert('회원가입 성공');
+                        this.dialog = false;
+                    }
+                } else {
+                    alert('비밀번호가 일치하지 않습니다.');
+                    this.$refs.checkPwd.focus();
+                }
             }
         },
 
