@@ -72,6 +72,11 @@ export default {
              * 새로운 비밀번호 입력 시 비밀번호 확인과 일치해야한다.
              * 수정 여부를 확인 한 후 수정한다.
              */            
+            if (this.user.pwd.length === 0 || this.user.name.length === 0  || this.user.id.length === 0 ){
+                alert('*는 필수 값입니다. 입력해주세요.');
+                return false;
+            }
+
             if (this.user.newPwd !== this.checkPwd) {
                 alert('비밀번호가 일치하지 않습니다.');
                 return false;
