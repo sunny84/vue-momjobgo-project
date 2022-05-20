@@ -7,7 +7,7 @@ export default {
     namespaced : true,
 
     state : {
-        token : '',
+        token : sessionStorage.getItem("s-token"),
         user : {
             id : '',
             name : ''
