@@ -7,7 +7,7 @@ export default {
     namespaced : true,
 
     state : {
-        token : sessionStorage.getItem("s-token"),
+        token : sessionStorage.getItem('access-token'),
         user : {
             id : '',
             name : ''
@@ -30,26 +30,27 @@ export default {
     },
 
     mutations : {
-        setToken(state, payload){
-            state.token = payload;
+        setToken(state, token){
+            state.token = token;
+            sessionStorage.setItem('access-token', token);
         },
-        setUserId(state, payload){            
-            state.user.id = payload;
+        setUserId(state, id){            
+            state.user.id = id;
         },
-        setUserName(state, payload){            
-            state.user.name = payload;
+        setUserName(state, name){            
+            state.user.name = name;
         }
     },
 
     actions : {
-        setToken({commit}, payload){
-            commit('setToken', payload);
+        setToken({commit}, token){
+            commit('setToken', token);
         },
-        setUserId({commit}, payload){
-            commit('setUserId', payload);
+        setUserId({commit}, id){
+            commit('setUserId', id);
         },
-        setUserName({commit}, payload){
-            commit('setUserName', payload);
+        setUserName({commit}, name){
+            commit('setUserName', name);
         }
     }
 }

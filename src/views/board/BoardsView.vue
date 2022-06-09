@@ -108,7 +108,7 @@
         <!-- 테이블 제목 -->
         <!-- 테이블 제목 클릭시 popDetailModal(item) 메소드를 호출하도록 구현, 댓글 갯수가 제목 옆에 보이도록 구현.-->
         <template #[`item.title`]="{ item }">
-            <span @click="popDetailModal(item)"> {{ item.title }} | 댓글 갯수 </span>
+            <span @click="popDetailModal(item)"> {{ item.title }}({{ item.commentCnt }}) </span>
         </template>
 
         <!-- 테이블 날짜 -->
@@ -190,7 +190,6 @@
                 title: "",
                 contents: "",
             },
-
         }),
 
         components : {
@@ -236,8 +235,10 @@
                  * 
                  * boards에 응답 결과를 대입해준다.
                  */
-                const response = await this.$api('/api/board', 'get');
-                this.boards = response.data;
+                const response = await this.$api('/api/board', 'GET');
+                if(response.status === this.HTTP_OK) {
+                    this.boards = response.data;
+                }
             },
 
             // 상세정보 보기 모달 창 on
@@ -266,7 +267,13 @@
                 /**
                  * 게시물 삭제 구현.
                  */
-                const response = await this.$api(`/api/board/${this.selectedItem.bno}`, 'delete');
+                const response = await this.$api(`/api/board/${this.selectedItem.bno}`, 'DELETE');
+                if(response.status === this.HTTP_OK) {
+                    alert('삭제 되었습니다.');
+                    this.callBoards();
+                }
+
+                this.closeDelete();
             },
 
             // 글 등록 or 수정 모달 닫기.
@@ -299,24 +306,27 @@
                     /**
                      * 글 수정.
                      */
-                    const response = await this.$api(`/api/board/${this.selectedItem.bno}`, 'patch', {
+                    const response = await this.$api(`/api/board/${this.selectedItem.bno}`, 'PATCH', {
+                        bno : this.selectedIndex.bno,
                         title : this.selectedItem.title,
                         contents : this.selectedItem.contents
                     });
 
                     if(response.status === this.HTTP_OK || response.status === this.HTTP_CREATED){
                         alert("수정 되었습니다.");
+                        this.dialogEdit = false;
                     }
                 } else {
                     /**
                      * 글 신규등록.
                      */
-                    const response = await this.$api('/api/board', 'post', {
+                    const response = await this.$api('/api/board', 'POST', {
                         title : this.selectedItem.title,
                         contents : this.selectedItem.contents
                     });
                     if(response.status === this.HTTP_OK || response.status === this.HTTP_CREATED){
                         alert('글 신규등록 성공');
+                        this.dialogEdit = false;
                     }
                 }
                 this.initialize();
@@ -332,7 +342,7 @@
                 /**
                  * 좋아요 불러오기.
                  */
-                const response = await this.$api(`/api/board/emotion/${this.selectedItem.bno}`, 'get');
+                const response = await this.$api(`/api/board/emotion/${this.selectedItem.bno}`, 'GET', null);
                 if (response.data.emotion === null) {
                     this.emotionOn = null
                 } else {
@@ -344,9 +354,9 @@
                 /**
                  * 감정표현 클릭.
                  */
-                const response = await this.$api(`/api/board/emotion/${this.selectedItem.bno}`, 'post', {
-                    emotion : item.value
-                });          
+                this.emotionOn = this.emotionOn === item.value ? null : item.value;
+                await this.$api(`/api/board/emotion/${this.selectedItem.bno}`, 'POST', { emotion : item.emotionOn });
+                this.callBoards();
             },
 
         }

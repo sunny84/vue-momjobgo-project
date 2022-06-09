@@ -43,19 +43,22 @@ export default {
 
   computed : {  
     ...mapGetters('page', ['menuList', 'visible']),
-    ...mapGetters('user', ['hasToken', 'userName']),
-    ...mapActions('user', ['setToken']),
+    ...mapGetters('user', ['userName']),
   },
 
   methods : {
+    ...mapActions('user', ['setToken']),
+
     logout(){
       /**
        * 로그아웃 구현.
        * 
        * 토큰에 빈값이 들어가면 로그아웃이 된것으로 처리 됨.
        */
-      alert('로그아웃 되었습니다.');
-      // this.$router.push({ path: '/home' });
+      if(!confirm('로그아웃 하시겠습니까?')) {
+        return false;
+      }
+
       this.setToken('');
     }
   }

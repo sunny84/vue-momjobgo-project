@@ -33,7 +33,7 @@ export default {
 
     computed : {
         ...mapGetters('page',['menuList', 'basePath', 'getPath']),
-        ...mapGetters('user',['hasToken', 'setUserId', 'setUserName'])
+        ...mapGetters('user',['hasToken'])
     },
 
     methods : {
